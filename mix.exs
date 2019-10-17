@@ -8,11 +8,7 @@ defmodule Fluex.MixProject do
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       compilers: [:rustler] ++ Mix.compilers(),
-      rustler_crates: [
-        fluex_rs: [
-          mode: if(Mix.env() == :prod, do: :release, else: :debug)
-        ]
-      ],
+      rustler_crates: rustler_crates(),
       description: "fluent-rs NIF localization/translation for Elixir",
       package: package(),
       deps: deps()
@@ -24,8 +20,21 @@ defmodule Fluex.MixProject do
       files: ["lib", "mix.exs", "README.md"],
       maintainers: ["Kaitsh <kaitsh@d-git.de"],
       licenses: ["Apache License 2.0"],
-      files: ~w(lib priv mix.exs README* LICENSE*),
+      files: ~w(lib native mix.exs README* LICENSE*),
       links: %{"GitHub" => "https://github.com/kaitsh/fluex"}
+    ]
+  end
+
+  defp rustler_crates do
+    [
+      fluent_rs: [
+        path: "native/fluent_rs",
+        cargo: :system,
+        default_features: false,
+        features: [],
+        mode: :release
+        # mode: (if Mix.env == :prod, do: :release, else: :debug),
+      ]
     ]
   end
 
