@@ -1,6 +1,7 @@
 # Fluex
 
 ![Hex.pm](https://img.shields.io/hexpm/l/fluex)
+![Hex.pm](https://img.shields.io/hexpm/v/fluex)
 ![GitHub Release Date](https://img.shields.io/github/release-date/kaitsh/fluex)
 
 **TODO: Add description**
