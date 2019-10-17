@@ -1,6 +1,7 @@
 # Fluex
 
-Currently a placeholder
+![Hex.pm](https://img.shields.io/hexpm/l/fluex)
+![GitHub Release Date](https://img.shields.io/github/release-date/kaitsh/fluex)
 
 **TODO: Add description**
 
@@ -12,7 +13,7 @@ by adding `fluex` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:fluex, "~> 0.1.0"}
+    {:fluex, ">= 0.0.0"}
   ]
 end
 ```
@@ -20,4 +21,3 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/fluex](https://hexdocs.pm/fluex).
-
