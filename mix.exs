@@ -24,6 +24,7 @@ defmodule Fluex.MixProject do
       files: ["lib", "mix.exs", "README.md"],
       maintainers: ["Kaitsh <kaitsh@d-git.de"],
       licenses: ["Apache License 2.0"],
+      files: ~w(lib priv mix.exs README* LICENSE*),
       links: %{"GitHub" => "https://github.com/kaitsh/fluex"}
     ]
   end
