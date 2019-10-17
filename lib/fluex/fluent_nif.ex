@@ -1,5 +1,5 @@
-defmodule Fluex.FluentRS do
-  use Rustler, otp_app: :fluex, crate: :fluex_rs
+defmodule Fluex.FluentNIF do
+  use Rustler, otp_app: :fluex, crate: :fluent_nif
 
   def new(_locale, _ftl), do: error()
   def has_message?(_bundle_ref, _id), do: error()

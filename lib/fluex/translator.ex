@@ -1,6 +1,6 @@
 defmodule Fluex.Translator do
   use GenServer
-  alias Fluex.FluentRS, as: Fluent
+  alias Fluex.FluentNIF, as: Fluent
 
   def start_link(config) do
     translations =

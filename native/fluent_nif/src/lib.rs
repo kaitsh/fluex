@@ -21,7 +21,7 @@ mod atoms {
 struct FluexBundle(FluentBundle<FluentResource>);
 
 rustler::rustler_export_nifs! {
-    "Elixir.Fluex.FluentRS",
+    "Elixir.Fluex.FluentNIF",
     [
         ("new", 2, new),
         ("has_message?", 2, has_message),

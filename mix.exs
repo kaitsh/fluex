@@ -27,8 +27,8 @@ defmodule Fluex.MixProject do
 
   defp rustler_crates do
     [
-      fluent_rs: [
-        path: "native/fluent_rs",
+      fluent_nif: [
+        path: "native/fluent_nif",
         cargo: :system,
         default_features: false,
         features: [],
