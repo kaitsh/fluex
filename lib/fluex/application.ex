@@ -4,11 +4,13 @@ defmodule Fluex.Application do
   @moduledoc false
 
   use Application
+  alias Fluex.Translator
 
   def start(_type, _args) do
+    config = Application.get_all_env(:fluex)
+
     children = [
-      # Starts a worker by calling: Fluex.Worker.start_link(arg)
-      # {Fluex.Worker, arg}
+      {Translator, config}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
