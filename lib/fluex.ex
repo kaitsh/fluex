@@ -50,24 +50,15 @@ defmodule Fluex do
     config :fluex, translators: [{:es, :en}]
 
   """
-  alias Fluex.Translator
 
-  @doc """
-  Returns the translated string for a give id. If the translation is not found, the fallback string
-  is returned. If the id does not exist `{:error, :not_found}` is returned. If the locale is not supported
-  `{:error, :not_supported}` is returned.
+  @doc false
+  defmacro __using__(opts) do
+    quote do
+      require Logger
+      require Fluex.Bundler
 
-  ## Examples
-
-    iex> Fluex.translate(:es, "hello-user", %{userName: "Example User"})
-        {:ok, "Hello, Example User!"}
-
-    iex> Fluex.translate(:de, "hello-user", %{userName: "Example User"})
-        {:error, :not_supported}
-  """
-  @spec translate(locale :: atom, id :: binary, attrs :: map()) ::
-          {:ok, binary} | {:error, :not_found} | {:error, :not_supported}
-  def translate(locale, id, attrs \\ %{}) do
-    Translator.translate(locale, id, attrs)
+      @fluex_opts unquote(opts)
+      @before_compile Fluex.Bundler
+    end
   end
 end
