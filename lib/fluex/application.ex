@@ -7,11 +7,7 @@ defmodule Fluex.Application do
   alias Fluex.Translator
 
   def start(_type, _args) do
-    config = Application.get_all_env(:fluex)
-
-    children = [
-      {Translator, config}
-    ]
+    children = []
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
