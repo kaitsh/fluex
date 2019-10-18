@@ -55,10 +55,12 @@ defmodule Fluex do
   defmacro __using__(opts) do
     quote do
       require Logger
-      require Fluex.Bundler
+      require Fluex.Resources
 
       @fluex_opts unquote(opts)
-      @before_compile Fluex.Bundler
+      @before_compile Fluex.Resources
+
+      @on_load
     end
   end
 end

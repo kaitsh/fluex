@@ -1,4 +1,4 @@
-defmodule Fluex.Bundler do
+defmodule Fluex.Resources do
   require Logger
 
   @default_priv "priv/fluex"
@@ -30,6 +30,13 @@ defmodule Fluex.Bundler do
 
     resolved_locales = resolve_locales(known_locales, requested_locales)
 
+    quote do
+      def __fluex__(:priv), do: unquote(priv)
+      def __fluex__(:locales), do: unquote(resolved_locales)
+      def __fluex__(:default_locale), do: unquote(default_locale)
+      def __fluex__(:resources), do: unquote(resources)
+    end
+
     for locale <- requested_locales do
       quote do
         unquote(build_ftls(translations_dir, locale, resources, opts))
@@ -55,6 +62,7 @@ defmodule Fluex.Bundler do
     path
     |> Path.relative_to(root)
     |> Path.split()
+    # drop locale identifier e.g. in {locale}/resource.ftl
     |> Enum.drop(1)
     |> Path.join()
   end
