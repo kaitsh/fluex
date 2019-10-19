@@ -51,16 +51,25 @@ defmodule Fluex do
 
   """
 
+  require Fluex.Compiler
+
   @doc false
   defmacro __using__(opts) do
     quote do
-      require Logger
-      require Fluex.Resources
-
       @fluex_opts unquote(opts)
-      @before_compile Fluex.Resources
-
-      @on_load
+      @before_compile Fluex.Compiler
     end
+  end
+
+  def start_link(translator, opts \\ []) do
+    Fluex.Supervisor.start_link(
+      translator,
+      translator.__fluex__(:locales),
+      translator.__fluex__(:resources),
+      opts
+    )
+  end
+
+  def translate(translator, id, bindings \\ %{}) do
   end
 end
