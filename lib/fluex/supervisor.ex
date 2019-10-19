@@ -34,7 +34,7 @@ defmodule Fluex.Supervisor do
         {locale, bundles}
       end)
 
-    Fluex.Registry.associate(translator, meta)
+    Fluex.Registry.associate(self(), meta)
 
     Supervisor.init([], strategy: :one_for_one, max_restarts: 0)
   end

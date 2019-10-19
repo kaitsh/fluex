@@ -44,6 +44,10 @@ defmodule Fluex.Compiler do
       def start_link(opts \\ []) do
         Fluex.start_link(unquote(env.module), opts)
       end
+
+      def translate(id, bindings \\ %{}) do
+        Fluex.translate(unquote(env.module), id, bindings)
+      end
     end
   end
 

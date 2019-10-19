@@ -52,6 +52,7 @@ defmodule Fluex do
   """
 
   require Fluex.Compiler
+  alias Fluex.FluentNIF
 
   @doc false
   defmacro __using__(opts) do
@@ -77,5 +78,31 @@ defmodule Fluex do
   end
 
   def translate(translator, id, bindings \\ %{}) do
+    bundles = Fluex.Registry.lookup(translator)
+    locale = Map.get(bundles, get_locale())
+    fallback = Map.get(bundles, "en")
+
+    cond do
+      locale && FluentNIF.has_message?(locale, id) ->
+        FluentNIF.format_pattern(locale, id, bindings)
+
+      fallback && FluentNIF.has_message?(fallback, id) ->
+        FluentNIF.format_pattern(fallback, id, bindings)
+
+      true ->
+        raise(
+          RuntimeError,
+          "bundles in translator #{translator} do no contain a message with id: #{id}"
+        )
+    end
   end
+
+  def get_locale() do
+    Process.get(Fluex)
+  end
+
+  def put_locale(locale) when is_binary(locale), do: Process.put(Fluex, locale)
+
+  def put_locale(locale),
+    do: raise(ArgumentError, "put_locale/1 only accepts binary locales, got: #{inspect(locale)}")
 end
