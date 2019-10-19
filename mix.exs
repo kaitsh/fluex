@@ -42,6 +42,7 @@ defmodule Fluex.MixProject do
   def application do
     [
       extra_applications: [:logger],
+      env: [default_locale: "en"],
       mod: {Fluex.Application, []}
     ]
   end

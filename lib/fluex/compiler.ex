@@ -1,5 +1,6 @@
 defmodule Fluex.Compiler do
   alias Fluex.Resources
+
   @default_priv "priv/fluex"
 
   @doc false
@@ -23,16 +24,11 @@ defmodule Fluex.Compiler do
     resources = Keyword.get(opts, :resources, ["#{otp_app}.ftl"])
     requested_locales = Keyword.get(opts, :requested, [])
     known_locales = known_locales(translations_dir)
-
-    default_locale =
-      opts[:default_locale] || quote(do: Application.fetch_env!(:fluex, :default_locale))
-
     resolved_locales = resolve_locales(known_locales, requested_locales)
 
     quote do
       def __fluex__(:priv), do: unquote(priv)
       def __fluex__(:locales), do: unquote(resolved_locales)
-      def __fluex__(:default_locale), do: unquote(default_locale)
       def __fluex__(:resources), do: unquote(resources)
 
       unquote(Enum.flat_map(resolved_locales, &Resources.build_resources(priv, &1, resources)))
