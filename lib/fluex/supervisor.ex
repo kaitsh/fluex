@@ -4,8 +4,6 @@ defmodule Fluex.Supervisor do
   alias Fluex.FluentNIF
   alias Fluex.Resources
 
-  @default_priv "priv/fluex"
-
   @doc """
   Starts the translator supervisor.
   """
@@ -14,7 +12,7 @@ defmodule Fluex.Supervisor do
 
     Supervisor.start_link(
       __MODULE__,
-      {name, translator, opts},
+      {translator},
       sup_opts
     )
   end
@@ -22,7 +20,7 @@ defmodule Fluex.Supervisor do
   ## Callbacks
 
   @doc false
-  def init({name, translator, opts}) do
+  def init({translator}) do
     locales = translator.__fluex__(:locales)
     resources = translator.__fluex__(:resources)
 
