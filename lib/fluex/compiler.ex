@@ -37,6 +37,10 @@ defmodule Fluex.Compiler do
 
       unquote(Enum.flat_map(resolved_locales, &Resources.build_resources(priv, &1, resources)))
 
+      def child_spec(opts) do
+        Fluex.child_spec(unquote(env.module), opts)
+      end
+
       def start_link(opts \\ []) do
         Fluex.start_link(unquote(env.module), opts)
       end

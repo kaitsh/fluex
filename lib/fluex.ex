@@ -61,11 +61,17 @@ defmodule Fluex do
     end
   end
 
+  def child_spec(translator, opts) do
+    %{
+      id: translator,
+      start: {translator, :start_link, [opts]},
+      type: :supervisor
+    }
+  end
+
   def start_link(translator, opts \\ []) do
     Fluex.Supervisor.start_link(
       translator,
-      translator.__fluex__(:locales),
-      translator.__fluex__(:resources),
       opts
     )
   end

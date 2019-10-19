@@ -9,12 +9,12 @@ defmodule Fluex.Supervisor do
   @doc """
   Starts the translator supervisor.
   """
-  def start_link(translator, locales, resources, opts) do
+  def start_link(translator, opts) do
     sup_opts = if name = Keyword.get(opts, :name, translator), do: [name: name], else: []
 
     Supervisor.start_link(
       __MODULE__,
-      {name, translator, locales, resources, opts},
+      {name, translator, opts},
       sup_opts
     )
   end
@@ -22,10 +22,20 @@ defmodule Fluex.Supervisor do
   ## Callbacks
 
   @doc false
-  def init({name, translator, locales, resources, opts}) do
-    Enum.map(locales, fn locale ->
-      merged = Resources.merge_resources(translator, locale, resources)
-      bundle = FluentNIF.new(locale, merged)
-    end)
+  def init({name, translator, opts}) do
+    locales = translator.__fluex__(:locales)
+    resources = translator.__fluex__(:resources)
+
+    meta =
+      Map.new(locales, fn locale ->
+        merged = Resources.merge_resources(translator, locale, resources)
+        bundles = FluentNIF.new(locale, merged)
+
+        {locale, bundles}
+      end)
+
+    Fluex.Registry.associate(translator, meta)
+
+    Supervisor.init([], strategy: :one_for_one, max_restarts: 0)
   end
 end
