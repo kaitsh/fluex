@@ -4,10 +4,11 @@ defmodule Fluex.Application do
   @moduledoc false
 
   use Application
-  alias Fluex.Translator
 
   def start(_type, _args) do
-    children = []
+    children = [
+      # Fluex.Tester
+    ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
