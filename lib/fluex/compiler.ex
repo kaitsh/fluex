@@ -1,7 +1,7 @@
 defmodule Fluex.Compiler do
   alias Fluex.Resources
 
-  @default_priv "priv/fluex"
+  @default_dir "priv/fluex"
 
   @doc false
   defmacro __before_compile__(env) do
@@ -19,19 +19,28 @@ defmodule Fluex.Compiler do
     mix_config_opts = Application.get_env(otp_app, env.module, [])
     opts = Keyword.merge(mix_config_opts, compile_time_opts)
 
-    priv = Keyword.get(opts, :priv, @default_priv)
-    translations_dir = Application.app_dir(otp_app, priv)
+    translations_dir = Keyword.get(opts, :dir, @default_dir)
     resources = Keyword.get(opts, :resources, ["#{otp_app}.ftl"])
+
+    default_locale =
+      opts[:default_locale] || quote(do: Application.fetch_env!(:fluex, :default_locale))
+
     requested_locales = Keyword.get(opts, :requested, [])
     known_locales = known_locales(translations_dir)
     resolved_locales = resolve_locales(known_locales, requested_locales)
 
     quote do
-      def __fluex__(:priv), do: unquote(priv)
+      def __fluex__(:dir), do: unquote(translations_dir)
       def __fluex__(:locales), do: unquote(resolved_locales)
+      def __fluex__(:default_locale), do: unquote(default_locale)
       def __fluex__(:resources), do: unquote(resources)
 
-      unquote(Enum.flat_map(resolved_locales, &Resources.build_resources(priv, &1, resources)))
+      unquote(
+        Enum.flat_map(
+          resolved_locales,
+          &Resources.build_resources(translations_dir, &1, resources)
+        )
+      )
 
       def child_spec(opts) do
         Fluex.child_spec(unquote(env.module), opts)

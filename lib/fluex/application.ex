@@ -7,8 +7,7 @@ defmodule Fluex.Application do
 
   def start(_type, _args) do
     children = [
-      Fluex.Registry,
-      Fluex.Tester
+      Fluex.Registry
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

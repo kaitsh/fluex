@@ -79,15 +79,15 @@ defmodule Fluex do
 
   def translate(translator, id, bindings \\ %{}) do
     bundles = Fluex.Registry.lookup(translator)
-    locale = Map.get(bundles, get_locale())
-    fallback = Map.get(bundles, load_default_locale())
+    locale = Map.get(bundles, get_locale(translator))
+    fallback = Map.get(bundles, translator.__fluex__(:default_locale))
 
     cond do
       locale && FluentNIF.has_message?(locale, id) ->
-        FluentNIF.format_pattern(locale, id, bindings)
+        FluentNIF.format_pattern(locale, id, stringify(bindings))
 
       fallback && FluentNIF.has_message?(fallback, id) ->
-        FluentNIF.format_pattern(fallback, id, bindings)
+        FluentNIF.format_pattern(fallback, id, stringify(bindings))
 
       true ->
         raise(
@@ -97,21 +97,29 @@ defmodule Fluex do
     end
   end
 
-  def load_default_locale() do
+  defp stringify(bindings) when is_map(bindings) do
+    Map.new(bindings, fn
+      {key, val} -> {to_string(key), to_string(val)}
+    end)
+  end
+
+  def __fluex__(:default_locale) do
     # If this is not set by the user, it's still set in mix.exs (to "en").
     Application.fetch_env!(:fluex, :default_locale)
   end
 
-  def get_locale() do
-    if locale = Process.get(Fluex) do
-      locale
-    else
-      load_default_locale()
+  def get_locale(translator \\ Fluex) do
+    with nil <- Process.get(translator),
+         nil <- Process.get(Fluex) do
+      translator.__fluex__(:default_locale)
     end
   end
 
-  def put_locale(locale) when is_binary(locale), do: Process.put(Fluex, locale)
+  def put_locale(translator \\ Fluex, locale)
 
-  def put_locale(locale),
+  def put_locale(translator, locale) when is_binary(locale),
+    do: Process.put(translator, locale)
+
+  def put_locale(_translator, locale),
     do: raise(ArgumentError, "put_locale/1 only accepts binary locales, got: #{inspect(locale)}")
 end
