@@ -109,8 +109,9 @@ defmodule Fluex do
       #=> "Hello \u{2068}world\u{2069}"
 
 
-  The FSI/PDI isolation marks ensure that the direction of
-  the text from the variable is not affected by the translation.
+  The result string contains FSI/PDI isolation marks to ensure that
+  the direction of the text from the variable is not affected by the
+  translation.
   """
 
   require Fluex.Compiler
