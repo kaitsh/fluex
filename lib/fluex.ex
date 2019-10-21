@@ -125,6 +125,7 @@ defmodule Fluex do
     end
   end
 
+  @doc false
   def child_spec(translator, opts) do
     %{
       id: translator,
@@ -133,6 +134,7 @@ defmodule Fluex do
     }
   end
 
+  @doc false
   def start_link(translator, opts \\ []) do
     Fluex.Supervisor.start_link(
       translator,
@@ -170,6 +172,7 @@ defmodule Fluex do
     end)
   end
 
+  @doc false
   def __fluex__(:default_locale) do
     # If this is not set by the user, it's still set in mix.exs (to "en").
     Application.fetch_env!(:fluex, :default_locale)
