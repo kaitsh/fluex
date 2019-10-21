@@ -114,7 +114,6 @@ defmodule Fluex do
   translation.
   """
 
-  require Fluex.Compiler
   alias Fluex.FluentNIF
 
   @doc false
