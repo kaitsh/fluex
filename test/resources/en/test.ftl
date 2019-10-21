@@ -19,3 +19,7 @@ sync-headline-title =
     your data always with you
 sync-signedout-title =
     Connect with your {-sync-brand-name}
+
+## Testing
+
+not-translated = Only available in en

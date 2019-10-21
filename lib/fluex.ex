@@ -78,8 +78,12 @@ defmodule Fluex do
   end
 
   def translate(translator, id, bindings \\ %{}) do
+    ltranslate(translator, get_locale(translator), id, bindings)
+  end
+
+  def ltranslate(translator, locale, id, bindings \\ %{}) do
     bundles = Fluex.Registry.lookup(translator)
-    locale = Map.get(bundles, get_locale(translator))
+    locale = Map.get(bundles, locale)
     fallback = Map.get(bundles, translator.__fluex__(:default_locale))
 
     cond do

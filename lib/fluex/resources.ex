@@ -11,11 +11,10 @@ defmodule Fluex.Resources do
   end
 
   defp resources_in_dir(dir, resources) do
-    resources = "{#{Enum.join(resources, ",")}}"
-
-    dir
-    |> Path.join(resources)
-    |> Path.wildcard()
+    resources
+    |> Enum.map(fn path ->
+      Path.join(dir, path)
+    end)
   end
 
   defp resource_from_path(root, path) do

@@ -25,7 +25,7 @@ defmodule Fluex.Compiler do
     default_locale =
       opts[:default_locale] || quote(do: Application.fetch_env!(:fluex, :default_locale))
 
-    requested_locales = Keyword.get(opts, :requested, [])
+    requested_locales = Keyword.get(opts, :locales, [])
     known_locales = known_locales(translations_dir)
     resolved_locales = resolve_locales(known_locales, requested_locales)
 
@@ -53,6 +53,10 @@ defmodule Fluex.Compiler do
       def translate(id, bindings \\ %{}) do
         Fluex.translate(unquote(env.module), id, bindings)
       end
+
+      def ltranslate(locale, id, bindings \\ %{}) do
+        Fluex.ltranslate(unquote(env.module), locale, id, bindings)
+      end
     end
   end
 
@@ -65,6 +69,10 @@ defmodule Fluex.Compiler do
       {:error, :enoent} ->
         []
     end
+  end
+
+  defp resolve_locales(available, []) do
+    available
   end
 
   defp resolve_locales(available, requested) do
