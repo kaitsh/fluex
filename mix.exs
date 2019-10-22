@@ -9,7 +9,7 @@ defmodule Fluex.MixProject do
       start_permanent: Mix.env() == :prod,
       compilers: [:rustler] ++ Mix.compilers(),
       rustler_crates: rustler_crates(),
-      description: "fluent-rs NIF localization/translation for Elixir",
+      description: "Localization system for natural-sounding translations using fluent-rs",
       package: package(),
       deps: deps()
     ]
