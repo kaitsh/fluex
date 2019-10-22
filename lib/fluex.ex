@@ -91,7 +91,7 @@ defmodule Fluex do
 
   ### Fluex API
 
-  Fluex provides a `translate/3` and `ltranslate/3` macro to your own Fluex module, like `MyApp.Fluex`.
+  Fluex provides `translate/3` and `ltranslate/3` macros to your own Fluex module, like `MyApp.Fluex`.
   These macros call the `translate/3` and `ltranslate/3` functions from the `Fluex` module
   A simple example is:
 
@@ -102,10 +102,10 @@ defmodule Fluex do
       Fluex.put_locale(MyApp.Fluex, "pt_BR")
 
       msgid = "Hello"
-      MyApp.Fluex.translate(msgid, %{user: "mundo"})
+      MyApp.Fluex.translate!(msgid, %{user: "mundo"})
       #=> "Olá \u{2068}mundo\u{2069}"
 
-      MyApp.Fluex.ltranslate("en", msgid, %{user: "world"})
+      MyApp.Fluex.ltranslate!("en", msgid, %{user: "world"})
       #=> "Hello \u{2068}world\u{2069}"
 
 
@@ -141,8 +141,25 @@ defmodule Fluex do
     )
   end
 
+  def translate!(translator, id, bindings \\ %{}) do
+    ltranslate!(translator, get_locale(translator), id, bindings)
+  end
+
   def translate(translator, id, bindings \\ %{}) do
     ltranslate(translator, get_locale(translator), id, bindings)
+  end
+
+  def ltranslate!(translator, locale, id, bindings \\ %{}) do
+    case ltranslate(translator, locale, id, bindings) do
+      {:ok, msg} ->
+        msg
+
+      {:error, _} ->
+        raise(
+          RuntimeError,
+          "bundles in translator #{translator} do no contain a message with id: #{id}"
+        )
+    end
   end
 
   def ltranslate(translator, locale, id, bindings \\ %{}) do
@@ -152,16 +169,13 @@ defmodule Fluex do
 
     cond do
       locale && FluentNIF.has_message?(locale, id) ->
-        FluentNIF.format_pattern(locale, id, stringify(bindings))
+        {:ok, FluentNIF.format_pattern(locale, id, stringify(bindings))}
 
       fallback && FluentNIF.has_message?(fallback, id) ->
-        FluentNIF.format_pattern(fallback, id, stringify(bindings))
+        {:ok, FluentNIF.format_pattern(fallback, id, stringify(bindings))}
 
       true ->
-        raise(
-          RuntimeError,
-          "bundles in translator #{translator} do no contain a message with id: #{id}"
-        )
+        {:error, :not_found}
     end
   end
 

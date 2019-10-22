@@ -61,21 +61,29 @@ defmodule FluexTest do
     end
   end
 
-  describe "translate/3" do
+  describe "ltranslate/3" do
     test "returns message for id and locale" do
-      assert Translator.ltranslate("en", "tabs-close-tooltip", %{tabCount: 5}) ===
+      assert Translator.ltranslate!("en", "tabs-close-tooltip", %{tabCount: 5}) ===
                "Close \u{2068}5\u{2069} tabs"
 
-      assert Translator.ltranslate("it", "tabs-close-tooltip", %{tabCount: 2}) ===
+      assert Translator.ltranslate!("it", "tabs-close-tooltip", %{tabCount: 2}) ===
                "Chiudi \u{2068}2\u{2069} schede"
 
-      assert TranslatorWithDefaultConfig.translate("hello", %{world: "World"}) ===
+      assert TranslatorWithDefaultConfig.translate!("hello", %{world: "World"}) ===
                "Hello \u{2068}World\u{2069}"
     end
 
-    test "returns fallback to default locale if message is not translated" do
-      assert Translator.ltranslate("it", "not-translated") ===
+    test "returns fallback if message is not translated" do
+      assert Translator.ltranslate!("it", "not-translated") ===
                "Only available in en"
+    end
+
+    test "returns nil or raises if message id does not exist" do
+      assert Translator.ltranslate("en", "not-existing-id") == {:error, :not_found}
+
+      assert_raise RuntimeError, fn ->
+        Translator.ltranslate!("en", "not-existing-id")
+      end
     end
   end
 end
