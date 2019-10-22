@@ -1,0 +1,10 @@
+Parts of this application were inspired by other Open Source projects. You can find the source code of these projects along with license information below.
+We acknowledge and are grateful to these developers for their contributions to open source.
+
+Project:  gettext https://github.com/elixir-gettext/gettext
+Copyright 2015 Plataformatec
+License (Apache License, Version 2.0) http://www.apache.org/licenses/LICENSE-2.0
+
+Project: ecto https://github.com/elixir-ecto/ecto
+Copyright (c) 2013 Plataformatec
+License (Apache License, Version 2.0) http://www.apache.org/licenses/LICENSE-2.0

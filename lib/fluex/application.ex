@@ -4,13 +4,10 @@ defmodule Fluex.Application do
   @moduledoc false
 
   use Application
-  alias Fluex.Translator
 
   def start(_type, _args) do
-    config = Application.get_all_env(:fluex)
-
     children = [
-      {Translator, config}
+      Fluex.Registry
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
