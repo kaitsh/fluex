@@ -50,8 +50,16 @@ defmodule Fluex.Compiler do
         Fluex.start_link(unquote(env.module), opts)
       end
 
+      def translate!(id, bindings \\ %{}) do
+        Fluex.translate!(unquote(env.module), id, bindings)
+      end
+
       def translate(id, bindings \\ %{}) do
         Fluex.translate(unquote(env.module), id, bindings)
+      end
+
+      def ltranslate!(locale, id, bindings \\ %{}) do
+        Fluex.ltranslate!(unquote(env.module), locale, id, bindings)
       end
 
       def ltranslate(locale, id, bindings \\ %{}) do
