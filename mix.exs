@@ -30,10 +30,9 @@ defmodule Fluex.MixProject do
       fluent_nif: [
         path: "native/fluent_nif",
         cargo: :system,
-        default_features: false,
+        default_features: true,
         features: [],
-        mode: :release
-        # mode: (if Mix.env == :prod, do: :release, else: :debug),
+        mode: (if Mix.env == :prod, do: :release, else: :debug),
       ]
     ]
   end
